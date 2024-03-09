@@ -1,0 +1,209 @@
+{
+  "metadata": {
+    "kernelspec": {
+      "name": "python",
+      "display_name": "Python (Pyodide)",
+      "language": "python"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "python",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.8"
+    },
+    "colab": {
+      "provenance": []
+    }
+  },
+  "nbformat_minor": 4,
+  "nbformat": 4,
+  "cells": [
+    {
+      "cell_type": "raw",
+      "source": "## <b>Understanding Feedforward Neural Network</b>",
+      "metadata": {
+        "id": "be6QWnmo_90p"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": "In this lab, you are required to build 3 Feedforward Neural Networks to simulate function\n<br> $y = xsin( \\frac {x^2} {300})$\n<br> in range x: +-100\n<br> You need to have a different structure for each model you build.",
+      "metadata": {
+        "id": "q17Fv-S-AFPw"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": "##Requirements",
+      "metadata": {
+        "id": "5qw2_zjxqTnq"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": "1 You are required to finish each part below following instructions.\n<br>2 You may work on native py files, but your work needs to include same documentation. You may use pytorch or tensorflow keras.\n<br>3 You may work in a group of 2.\n\n<br><b>For submission, submit a link to your github repo</b>\n<br>Each student in the group must all submit.",
+      "metadata": {
+        "id": "3aQW7EXPFs5p"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": "#### Part 1 data preparation\n\nIn the cell below, generate training data for your model.\n<br> Generate a decent amount of training data in the interval of x.\n<br>\n<br>All data need to be separated by the same distance.\n",
+      "metadata": {
+        "id": "QxFzMiVTFpYq"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": "import numpy as np\n\ndef generate_data(num_points=1000):\n    xValues = np.linspace(-100, 100, num_points)\n    yValues = xValues * np.sin(xValues ** 2 / 300)\n    return xValues, yValues\n\n#generate the data\nx_train, y_train = generate_data()\n\n\n",
+      "metadata": {
+        "id": "YJs8FWjw9TC8",
+        "trusted": true
+      },
+      "outputs": [],
+      "execution_count": 1
+    },
+    {
+      "cell_type": "markdown",
+      "source": "#### Part 2 build models\n\nIn the cells below, build your models and train it with data from part1.\n<br>You need to split your training data to two parts. With 40% used in training, and 60% used in test.\n\n<br>You may do this with sklearn's train_test_split() or keras' validation_split together with train_test_split().",
+      "metadata": {
+        "id": "zgCswSdCJGNF"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": "# model 1\nimport tensorflow as tf\nfrom tensorflow import keras\nfrom sklearn.model_selection import train_test_split\n\ndef modelBuild_1():\n    model = keras.Sequential([keras.layers.Dense(64, activation='relu', input_shape=(1,)),\n                              keras.layers.Dense(64, activation='relu'),\n                              keras.layers.Dense(1)\n                             ])\n    model.compile(optimizer='adam', loss='mse', metrics=['mae'])\n    return model\n\n#splitting\nx_train, y_train, x_test, y_test = train_test_split(x_train, y_train, test_size=0.6)\n\n#training\nmodel_1 = modelBuild_1()\nhistory_1 = model_1.fit(x_train, y_train, epochs=100, validation_split=0.2, verbose=0)\n",
+      "metadata": {
+        "id": "nT4G0XhGJHXF",
+        "trusted": true
+      },
+      "outputs": [
+        {
+          "ename": "<class 'ModuleNotFoundError'>",
+          "evalue": "No module named 'tensorflow'",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mModuleNotFoundError\u001b[0m                       Traceback (most recent call last)",
+            "Cell \u001b[0;32mIn[2], line 2\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[38;5;66;03m# model 1\u001b[39;00m\n\u001b[0;32m----> 2\u001b[0m \u001b[38;5;28;01mimport\u001b[39;00m \u001b[38;5;21;01mtensorflow\u001b[39;00m \u001b[38;5;28;01mas\u001b[39;00m \u001b[38;5;21;01mtf\u001b[39;00m\n\u001b[1;32m      3\u001b[0m \u001b[38;5;28;01mfrom\u001b[39;00m \u001b[38;5;21;01mtensorflow\u001b[39;00m \u001b[38;5;28;01mimport\u001b[39;00m keras\n\u001b[1;32m      4\u001b[0m \u001b[38;5;28;01mfrom\u001b[39;00m \u001b[38;5;21;01msklearn\u001b[39;00m\u001b[38;5;21;01m.\u001b[39;00m\u001b[38;5;21;01mmodel_selection\u001b[39;00m \u001b[38;5;28;01mimport\u001b[39;00m train_test_split\n",
+            "\u001b[0;31mModuleNotFoundError\u001b[0m: No module named 'tensorflow'"
+          ],
+          "output_type": "error"
+        }
+      ],
+      "execution_count": 2
+    },
+    {
+      "cell_type": "code",
+      "source": "# model 2\nimport tensorflow as tf\nfrom tensorflow import keras\nfrom sklearn.model_selection import train_test_split\n\ndef modelBuild_2():\n    model = keras.Sequential([keras.layers.Dense(128, activation='relu', input_shape=(1,)),\n                              keras.layers.Dense(64, activation='relu'),\n                              keras.layers.Dense(32, activation='relu'),\n                              keras.layers.Dense(1)\n                             ])\n    model.compile(optimizer='adam', loss='mse', metrics=['mae'])\n    return model\n\n#splitting\nx_train, y_train, x_test, y_test = train_test_split(x_train, y_train, test_size=0.6)\n\n#training\nmodel_2 = modelBuild_2()\nhistory_2 = model_2.fit(x_train, y_train, epochs=100, validation_split=0.2, verbose=0)\n",
+      "metadata": {
+        "id": "dNKmqDxQJyQ2",
+        "trusted": true
+      },
+      "outputs": [
+        {
+          "ename": "<class 'ModuleNotFoundError'>",
+          "evalue": "No module named 'tensorflow'",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mModuleNotFoundError\u001b[0m                       Traceback (most recent call last)",
+            "Cell \u001b[0;32mIn[3], line 2\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[38;5;66;03m# model 2\u001b[39;00m\n\u001b[0;32m----> 2\u001b[0m \u001b[38;5;28;01mimport\u001b[39;00m \u001b[38;5;21;01mtensorflow\u001b[39;00m \u001b[38;5;28;01mas\u001b[39;00m \u001b[38;5;21;01mtf\u001b[39;00m\n\u001b[1;32m      3\u001b[0m \u001b[38;5;28;01mfrom\u001b[39;00m \u001b[38;5;21;01mtensorflow\u001b[39;00m \u001b[38;5;28;01mimport\u001b[39;00m keras\n\u001b[1;32m      4\u001b[0m \u001b[38;5;28;01mfrom\u001b[39;00m \u001b[38;5;21;01msklearn\u001b[39;00m\u001b[38;5;21;01m.\u001b[39;00m\u001b[38;5;21;01mmodel_selection\u001b[39;00m \u001b[38;5;28;01mimport\u001b[39;00m train_test_split\n",
+            "\u001b[0;31mModuleNotFoundError\u001b[0m: No module named 'tensorflow'"
+          ],
+          "output_type": "error"
+        }
+      ],
+      "execution_count": 3
+    },
+    {
+      "cell_type": "code",
+      "source": "# model 3\nimport tensorflow as tf\nfrom tensorflow import keras\nfrom sklearn.model_selection import train_test_split\n\ndef modelBuild_3():\n    model = keras.Sequential([keras.layers.Dense(32, activation = 'relu', input_shape = (1,)),\n                              keras.layers.Dense(64, activation = 'relu'),\n                              keras.layers.Dense(32, activation = 'relu'),\n                              keras.layers.Dense(1)\n                             ])\n    model.compile(optimizer = 'adam', loss = 'mse', metrics = ['mae'])\n    return model\n\n#splitting\nx_train, y_train, x_test, y_test = train_test_split(x_train, y_train, test_size = 0.6)\n\n#training\nmodel_3 = modelBuild_3()\nhistory_3 = model_3.fit(x_train, y_train, epochs = 100, validation_split = 0.2, verbose = 0)\n",
+      "metadata": {
+        "id": "bJpwU6v0JyWT",
+        "trusted": true
+      },
+      "outputs": [
+        {
+          "ename": "<class 'ModuleNotFoundError'>",
+          "evalue": "No module named 'tensorflow'",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mModuleNotFoundError\u001b[0m                       Traceback (most recent call last)",
+            "Cell \u001b[0;32mIn[4], line 2\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[38;5;66;03m# model 3\u001b[39;00m\n\u001b[0;32m----> 2\u001b[0m \u001b[38;5;28;01mimport\u001b[39;00m \u001b[38;5;21;01mtensorflow\u001b[39;00m \u001b[38;5;28;01mas\u001b[39;00m \u001b[38;5;21;01mtf\u001b[39;00m\n\u001b[1;32m      3\u001b[0m \u001b[38;5;28;01mfrom\u001b[39;00m \u001b[38;5;21;01mtensorflow\u001b[39;00m \u001b[38;5;28;01mimport\u001b[39;00m keras\n\u001b[1;32m      4\u001b[0m \u001b[38;5;28;01mfrom\u001b[39;00m \u001b[38;5;21;01msklearn\u001b[39;00m\u001b[38;5;21;01m.\u001b[39;00m\u001b[38;5;21;01mmodel_selection\u001b[39;00m \u001b[38;5;28;01mimport\u001b[39;00m train_test_split\n",
+            "\u001b[0;31mModuleNotFoundError\u001b[0m: No module named 'tensorflow'"
+          ],
+          "output_type": "error"
+        }
+      ],
+      "execution_count": 4
+    },
+    {
+      "cell_type": "markdown",
+      "source": "#### Part 3 model evaluation\n\nIn the cells below, eval your model with training data, test data ( with model.evaluate( ) ), and plot your predict result on the same plot with the plot of goal function.",
+      "metadata": {
+        "id": "pzJ2ZNGKJ9oF"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": "import matplotlib.pyplot as plt\n\ndef evaluateModel(model, x_test, y_test):\n    loss. mae = model.evaluate(x_test, y_test, verbose = 0)\n    print(\"Test Loss: \", loss)\n    print(\"Test MAE: \", mae)\n\n#evaluate models\nprint(\"Model 1: \")\nevaluateModel(model_1, x_test, y_test)\nprint(\"\\n\")\nprint(\"Model 2: \")\nevaluateModel(model_2, x_test, y_test)\nprint(\"\\n\")\nprint(\"Model 3: \")\nevaluateModel(model_3, x_test, y_test)\n\n#plotting predictions\ndef plotting(model, xValues, yValues, title):\n    predictions = model.predict(xValues)\n    plt.figure(figsize = (10,6))\n    plt.scatter(xValues, yValues, label = 'Actual Data')\n    plt.plot(xValues, predictions, color = 'red', label = 'Predictions')\n    plt.title(title)\n    plt.legend\n    plt.show()\n\nplot_predictions(model_1, x_test, y_test, title = \"Model 1 Predictions\")\nplot_predictions(model_2, x_test, y_test, title = \"Model 2 Predictions\")\nplot_predictions(model_3, x_test, y_test, title = \"Model 3 Predictions\")\n",
+      "metadata": {
+        "id": "MCHdT5BxNMnN",
+        "trusted": true
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "text": "Model 1: \n",
+          "output_type": "stream"
+        },
+        {
+          "ename": "<class 'NameError'>",
+          "evalue": "name 'model_1' is not defined",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "Cell \u001b[0;32mIn[5], line 10\u001b[0m\n\u001b[1;32m      8\u001b[0m \u001b[38;5;66;03m#evaluate models\u001b[39;00m\n\u001b[1;32m      9\u001b[0m \u001b[38;5;28mprint\u001b[39m(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mModel 1: \u001b[39m\u001b[38;5;124m\"\u001b[39m)\n\u001b[0;32m---> 10\u001b[0m evaluateModel(\u001b[43mmodel_1\u001b[49m, x_test, y_test)\n\u001b[1;32m     11\u001b[0m \u001b[38;5;28mprint\u001b[39m(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;130;01m\\n\u001b[39;00m\u001b[38;5;124m\"\u001b[39m)\n\u001b[1;32m     12\u001b[0m \u001b[38;5;28mprint\u001b[39m(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mModel 2: \u001b[39m\u001b[38;5;124m\"\u001b[39m)\n",
+            "\u001b[0;31mNameError\u001b[0m: name 'model_1' is not defined"
+          ],
+          "output_type": "error"
+        }
+      ],
+      "execution_count": 5
+    },
+    {
+      "cell_type": "markdown",
+      "source": "#### Part 4 get model output and feedforward by yourself\n\nRecall how a Feedforward Neural Network gets its output. Now choose your model with highest accuracy, and call get_weights( ) to get its weights and bias.\n<br> Hint: bias and weights have different dimensions in most cases. Try to guess which index represent bias before you look it up on the internet.\n\n<br> Afterwards, choose 5 data from your training dataset, do all the necessary calculations (with program of course), and get the output of your model. Compare it to the model.predict( ) result.\n<br> They should be identical for the first several digitals, if not for all digits.",
+      "metadata": {
+        "id": "t3XlrMjvNPIq"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": "import numpy as np\n\nbest_model = model_2\nweights, biases = best_model.get_weights()\nprint(\"Weights Shape: \", weights.shape)\nprint(\"Biases Shape: \", biases.shape)\n\n#5 data points\nrandom_index = np.random.choice(len(x_train), 5)\nx_sample = x_train[random_index]\noutput_manual = np.dot(x_sample, weights[0]) + biases[0]\noutput_manual = np.dot(output_manual, weights[2]) + biases[2]\nprint(\"Calculated Output: \", output_manual)\n\n#compare\npredictions = best_model.predict(x_sample)\nprint(\"Model Predictions: \", predictions)\n\n",
+      "metadata": {
+        "id": "QlJCicHTOndf",
+        "trusted": true
+      },
+      "outputs": [
+        {
+          "ename": "<class 'NameError'>",
+          "evalue": "name 'model_2' is not defined",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)",
+            "Cell \u001b[0;32mIn[6], line 3\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[38;5;28;01mimport\u001b[39;00m \u001b[38;5;21;01mnumpy\u001b[39;00m \u001b[38;5;28;01mas\u001b[39;00m \u001b[38;5;21;01mnp\u001b[39;00m\n\u001b[0;32m----> 3\u001b[0m best_model \u001b[38;5;241m=\u001b[39m \u001b[43mmodel_2\u001b[49m\n\u001b[1;32m      4\u001b[0m weights, biases \u001b[38;5;241m=\u001b[39m best_model\u001b[38;5;241m.\u001b[39mget_weights()\n\u001b[1;32m      5\u001b[0m \u001b[38;5;28mprint\u001b[39m(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mWeights Shape: \u001b[39m\u001b[38;5;124m\"\u001b[39m, weights\u001b[38;5;241m.\u001b[39mshape)\n",
+            "\u001b[0;31mNameError\u001b[0m: name 'model_2' is not defined"
+          ],
+          "output_type": "error"
+        }
+      ],
+      "execution_count": 6
+    }
+  ]
+}
